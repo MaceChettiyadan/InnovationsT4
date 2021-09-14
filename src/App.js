@@ -3,7 +3,7 @@ import firebase from 'firebase';
 
 function App() {
   return (
-    <p>Your mom is form cool</p>
+    <p>Your mom is form coo l</p>
   );
 }
 
