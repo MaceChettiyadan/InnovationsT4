@@ -1,8 +1,20 @@
 import './App.css';
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
 
 function App() {
   const [ready, setReady] = useState(false);
+  const [currentRound, setCurrentRound] = useState(1);
+  const [money, setMoney] = useState(0);
+  const [storedWheat, setStoredWheat] = useState(0);
+  const [wheatStoreBonus, setWheatStoreBonus] = useState(0);
+  console.log(money)
+
+  useEffect(() => {
+    for (let x = 0; x < storedWheat; x++) {
+      setWheatStoreBonus(wheatStoreBonus + (storedWheat * 0.1));
+    }
+    setMoney(money + wheatStoreBonus);
+  }, [currentRound]);
 
   return (
     <div class="flex h-screen">
@@ -17,7 +29,27 @@ function App() {
           </button>
         </div>
         </>
-        ) : (<p>No</p>)}
+        ) : (
+          <>
+          <b class="text-center text-xl">Round {currentRound}</b>
+          <p class="text-center text-l">${money} <span class="text-green">(incl. +{wheatStoreBonus} Wheat Stored Bonus)</span>, {storedWheat} stored crops</p>
+          <p>You have earned 5 wheat. What do you do with it?</p>
+          <div class="flex items-center justify-center">
+          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2"onClick={() => {
+            setMoney(money + 10);
+            setCurrentRound(currentRound + 1)}
+          }>
+            Sell
+          </button>
+          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2" onClick={() => {
+            setStoredWheat(storedWheat + 5);
+            setCurrentRound(currentRound + 1)}
+          }>
+            Store
+          </button>
+        </div>
+        </>
+        )}
       </div>  
     </div>
   )
