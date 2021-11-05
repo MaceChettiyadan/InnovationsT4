@@ -9,7 +9,7 @@ Tasks:
 
 • Mace make good UI
 
-• Mace use farm image as background
+• Mace use farm image as background (images are in the images folder)
 
 • Mace use Game UI example as template to make good looking UI
 
@@ -19,3 +19,51 @@ Tasks:
 
 • Henry make Mace play airlines manager
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Imagine being sped lmao
