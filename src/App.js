@@ -1,60 +1,58 @@
-import { useEffect, useState } from 'react';
 import './App.css';
-//this is so crap and inefficient but i couldnt be bothered to make it better
-function App() {
-  const [money, setMoney] = useState(0);
-  const [wheat, setWheat] = useState(0);
-  const [day, setDay] = useState(1);
+import { useState, useEffect} from 'react';
 
-  const increaseConst = 10;
+function App() {
+  const [ready, setReady] = useState(false);
+  const [currentRound, setCurrentRound] = useState(1);
+  const [money, setMoney] = useState(0);
+  const [storedWheat, setStoredWheat] = useState(0);
+  const [wheatStoreBonus, setWheatStoreBonus] = useState(0);
+  console.log(money)
 
   useEffect(() => {
-    document.getElementById('sell').style.display = 'none';
-    document.getElementById('store').style.display = 'none';
-  }, []);
-
-  function farm() {
-    setWheat(wheat + increaseConst);
-    document.getElementById('sell').style.display = 'block';
-    document.getElementById('store').style.display = 'block';
-    document.getElementById('farm').style.display = 'none';
-  }
-
-  function sell() {
-    setMoney(money + 10);
-    setWheat(wheat - increaseConst);
-    setDay(day + 1);
-    document.getElementById('sell').style.display = 'none';
-    document.getElementById('farm').style.display = 'block';
-  }
-
-  function sellSiloWheat() {
-    setWheat(0);
-    setMoney(wheat**2);
-    console.log("game over");
-  }
-
-  function store() {
-    setWheat(wheat + 10);
-    setDay(day + 1);
-    document.getElementById('store').style.display = 'none';
-    document.getElementById('sell').style.display = 'none';
-    document.getElementById('farm').style.display = 'block';
-  }
+    for (let x = 0; x < storedWheat; x++) {
+      setWheatStoreBonus(wheatStoreBonus + (storedWheat * 0.1));
+    }
+    setMoney(money + wheatStoreBonus);
+  }, [currentRound]);
 
   return (
-    <div>
-      <b>Day {day}</b>
-      <p>Money: ${money}</p>
-      <p>Wheat: {wheat} tonnes</p>
-      <button id="farm" class="m-1 px-4 py-2 rounded-md text-sm font-medium border-0 focus:outline-none focus:ring transition text-white bg-gray-500 hover:bg-gray-600 active:bg-gray-700 focus:ring-gray-300" onClick={farm}>Farm</button>
-      <button id="sell" class="m-1 px-4 py-2 rounded-md text-sm font-medium border-0 focus:outline-none focus:ring transition text-white bg-gray-500 hover:bg-gray-600 active:bg-gray-700 focus:ring-gray-300" onClick={sell}>Sell Farmed Wheat</button>
-      <button id="store" class="m-1 px-4 py-2 rounded-md text-sm font-medium border-0 focus:outline-none focus:ring transition text-white bg-gray-500 hover:bg-gray-600 active:bg-gray-700 focus:ring-gray-300" onClick={store}>Store wheat in Silo</button>
-      <button class="m-1 px-4 py-2 rounded-md text-sm font-medium border-0 focus:outline-none focus:ring transition text-white bg-gray-500 hover:bg-gray-600 active:bg-gray-700 focus:ring-gray-300" onClick={sellSiloWheat}>Sell Silo Wheat</button>
+    <div class="flex h-screen">
+      <div class="m-auto">
+        {ready === false ? (
+        <>
+        <h1 class="text-2xl text-center font-bold">Innovations Mace Henry Choyu T4</h1>
+        <p class="text-center m-10 text-l">You will play <b>3</b> games of a game of risk. In this game, you will play multiple rounds as a farmer. In each round, you can <b>save</b> your farmed crops in a silo, where the crops increase in value each turn. Or, you can <b>sell</b> your wheat the day you farm it and earn assured money. There is a <b>random chance your silo breaks</b> and you lose all your crops and saved money. For this reason, you must balance risk with profit.</p>
+        <div class="flex items-center justify-center">
+          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => setReady(true)}>
+            I'm Ready
+          </button>
+        </div>
+        </>
+        ) : (
+          <>
+          <b class="text-center text-xl">Round {currentRound}</b>
+          <p class="text-center text-l">${money} <span class="text-green">(incl. +{wheatStoreBonus} Wheat Stored Bonus)</span>, {storedWheat} stored crops</p>
+          <p>You have earned 5 wheat. What do you do with it?</p>
+          <div class="flex items-center justify-center">
+          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2"onClick={() => {
+            setMoney(money + 10);
+            setCurrentRound(currentRound + 1)}
+          }>
+            Sell
+          </button>
+          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2" onClick={() => {
+            setStoredWheat(storedWheat + 5);
+            setCurrentRound(currentRound + 1)}
+          }>
+            Store
+          </button>
+        </div>
+        </>
+        )}
+      </div>  
     </div>
-  );
+  )
 }
 
 export default App;
-
-//macw
