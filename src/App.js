@@ -17,7 +17,7 @@ function App() {
   const [ready, setReady] = useState(false);
   const [currentRound, setCurrentRound] = useState(1);
   const [money, setMoney] = useState(0);
-  const [wheatStoreBonus, setWheatStoreBonus] = useState(0);
+  const [wheat, setwheat] = useState(0);
   const [end, setEnd] = useState(false);
   const [alerting, setAlerting] = useState(false);
 
@@ -27,13 +27,13 @@ function App() {
       rounds.splice(rounds.indexOf(currentRound), 1);
       setCurrentRound(0);
       setMoney(0);
-      setWheatStoreBonus(0);
+      setwheat(0);
       if (rounds.length === 0) {
         setEnd(true);
         const db = getDatabase();
         set(ref(db, "users/" + randomString(35)), {
           money: 0,
-          wheatStoreBonus: 0,
+          wheat: 0,
           firstStore: 0,
           numberOfStores: 0,
         });
@@ -62,9 +62,13 @@ function App() {
                 ></path>
               </svg>
               <div className="flex flex-col ml-3">
-                <div className="font-medium leading-none">Silo Destroyed, Game Over!</div>
+                <div className="font-medium leading-none">
+                  Silo Destroyed, Game Over!
+                </div>
                 <p className="text-sm text-gray-600 leading-none mt-1">
-                  Your silo was destroyed, and you lost all wheat stored in it. You are now starting a new game ({3 - rounds.length}/3 rounds).
+                  Your silo was destroyed, and you lost all wheat stored in it.
+                  You are now starting a new game ({3 - rounds.length}/3
+                  rounds).
                 </p>
               </div>
             </div>
@@ -112,16 +116,14 @@ function App() {
                   <b className="text-center text-xl">Round {currentRound}</b>
                   <p className="text-center text-l">
                     ${money}{" "}
-                    <span className="text-green-900">
-                      (+{wheatStoreBonus} Potential Wheat Profit)
-                    </span>
+                    <span className="text-green-900">({wheat} Wheat)</span>
                   </p>
-                  <p>You have earned 5 wheat. What do you do with it?</p>
                   <div className="flex items-center justify-center">
                     <button
                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2"
                       onClick={() => {
-                        setMoney(money + 10);
+                        setMoney(money + wheat * 5);
+                        setwheat(0);
                         setCurrentRound(currentRound + 1);
                       }}
                     >
@@ -130,10 +132,7 @@ function App() {
                     <button
                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2"
                       onClick={() => {
-                        setWheatStoreBonus(
-                          wheatStoreBonus +
-                            5 * (wheatStoreBonus === 0 ? 1 : wheatStoreBonus)
-                        );
+                        setwheat(wheat + 5);
                         setCurrentRound(currentRound + 1);
                       }}
                     >
