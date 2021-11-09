@@ -17,25 +17,31 @@ function App() {
   const [ready, setReady] = useState(false);
   const [currentRound, setCurrentRound] = useState(1);
   const [money, setMoney] = useState(0);
+  const [totalMoney, setTotalMoney] = useState(0);
+  const [totalWheat, setTotalWheat] = useState(0);
   const [wheat, setwheat] = useState(0);
   const [end, setEnd] = useState(false);
+  const [stores, setStores] = useState(0);
   const [alerting, setAlerting] = useState(false);
+  const [firstStore, setFirstStore] = useState(0);
 
   useEffect(() => {
     if (rounds.includes(currentRound)) {
       setAlerting(true);
       rounds.splice(rounds.indexOf(currentRound), 1);
       setCurrentRound(0);
+      setTotalMoney(totalMoney + money);
+      setTotalWheat(totalWheat + wheat);
       setMoney(0);
       setwheat(0);
       if (rounds.length === 0) {
         setEnd(true);
         const db = getDatabase();
         set(ref(db, "users/" + randomString(35)), {
-          money: 0,
-          wheat: 0,
-          firstStore: 0,
-          numberOfStores: 0,
+          money: totalMoney,
+          wheat: totalWheat,
+          firstStore: firstStore,
+          numberOfStores: stores,
         });
       }
     }
@@ -63,7 +69,7 @@ function App() {
               </svg>
               <div className="flex flex-col ml-3">
                 <div className="font-medium leading-none">
-                  Silo Destroyed, Game Over!
+                  Silo Destroyed, Game {3 - rounds.length} Over!
                 </div>
                 <p className="text-sm text-gray-600 leading-none mt-1">
                   Your silo was destroyed, and you lost all wheat stored in it.
@@ -134,6 +140,8 @@ function App() {
                       onClick={() => {
                         setwheat(wheat + 5);
                         setCurrentRound(currentRound + 1);
+                        setStores(stores + 1);
+                        if (firstStore === 0) setFirstStore(currentRound);
                       }}
                     >
                       Store
@@ -144,7 +152,7 @@ function App() {
             </>
           ) : (
             <p>
-              Game Over! Thanks for playing. Your results have been recorded.
+              All Games Over! Thanks for playing. Your results have been recorded.
             </p>
           )}
         </div>
